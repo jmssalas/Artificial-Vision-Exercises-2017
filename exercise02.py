@@ -12,41 +12,46 @@
 import cv2 as cv
 import datetime
 
-frame = None
-drawing, roi = False, False
-x0, y0 = -1, -1
-xf, yf = -1, -1
+frame = None                    # Current Frame
+drawing, roi = False, False     # - 'drawing' indicates that ROI rectangle is drawing
+                                # - 'roi' indicates that when left button up event happens, 
+                                #    if mouse move event happens, then ROI rectangle doesn't change. 
+x0, y0 = -1, -1                 # Initial position
+xf, yf = -1, -1                 # Final position
 
-roiList = list()
+roiList = list()                # List that contains ROI rectangles selected
 
-escKey = 27
-enterKey = 10
+escKey = 27                     # Escape key code
+enterKey = 10                   # Enter key code
 
 
+# Mouse event handler
 def mouseEventHandler(event, x, y, flags, param):
     global x0,y0,xf,yf,drawing,frame,roi
 
-    if event == cv.EVENT_LBUTTONDOWN:
+    if event == cv.EVENT_LBUTTONDOWN: # Indicate init ROI rectangle
         drawing = True
         x0, y0 = x, y
         xf, yf = x0, y0
 
-    elif event == cv.EVENT_MOUSEMOVE:
+    elif event == cv.EVENT_MOUSEMOVE: # Indicate changes of ROI rectangles
         if drawing and not roi:
             xf, yf = x, y
         
-    elif event == cv.EVENT_LBUTTONUP:
+    elif event == cv.EVENT_LBUTTONUP: # Indicate final ROI rectangle
         if drawing:
             xf, yf = x, y
             roi = True
             roiList.append(frame[y0:yf+1, x0:xf+1])
 
-
+# Set window's name
 cv.namedWindow("webcam")
+# Set mouseCallback to mouseEventHandler
 cv.setMouseCallback("webcam", mouseEventHandler)
 
-
-def play(f,dev=0):
+# Main function. 
+# Default -> dev = 0
+def play(dev=0):
     global frame,x0,y0,xf,yf,roi,drawing
 
     cap = cv.VideoCapture(dev)
@@ -85,4 +90,4 @@ def play(f,dev=0):
 
 
 if __name__ == "__main__":
-    play(lambda x: 255 - cv.cvtColor(x, cv.COLOR_RGB2GRAY))
+    play()
