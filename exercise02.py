@@ -41,6 +41,13 @@ def mouseEventHandler(event, x, y, flags, param):
     elif event == cv.EVENT_LBUTTONUP: # Indicate final ROI rectangle
         if drawing:
             xf, yf = x, y
+            # Check ROI's points sign
+            if yf < y0:
+                aux = y0; y0 = yf; yf = aux
+
+            if xf < x0:
+                aux = x0; x0 = xf; xf = aux
+
             roi = True
             roiList.append(frame[y0:yf+1, x0:xf+1])
 
