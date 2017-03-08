@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# Code on Github repository: git@github.com:jmssalas/Artificial-Vision-Exercises-2017.git
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
