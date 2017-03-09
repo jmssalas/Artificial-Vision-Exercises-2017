@@ -34,19 +34,18 @@ G = 1                               # G channel
 B = 2                               # B channel
 
 
-# Function which get RGB histogram of 'frame' param
-def getRGBHistogram(frame):
+# Function which get histogram of 'frame' param
+def getHistogram(frame):
     v = cv.calcHist(images=[frame], channels=[0, 1, 2], mask=None, histSize=[8, 8, 8], ranges=[0, 256, 0, 256, 0, 256])
     v = v.flatten()
     hist = v / sum(v)
     return hist
 
-# Function which get current frame converted to RGB
+# Function which get current frame
 def getFrame(cap):
     # Read frame
     ret, fr = cap.read()
-    # Convert BGR to RGB
-    return cv.cvtColor(fr, cv.COLOR_BGR2RGB)
+    return fr
 
 
 # Mouse event handler
@@ -89,7 +88,7 @@ def processFrame(frameToProcess, frameToDraw):
     # Else, get RGB histogram of 'frame':
     frameroi = frameToProcess[y0:yf + 1, x0:xf + 1]
 
-    frameHistogram = getRGBHistogram(frameroi)
+    frameHistogram = getHistogram(frameroi)
 
     # Get difference between current frame and ROI histograms
     diff = cv.compareHist(roiHistogram, frameHistogram, method=cv.HISTCMP_CHISQR)
@@ -129,7 +128,7 @@ def play(dev=0):
                 aux = x0; x0 = xf; xf = aux
 
             roi = np.copy(frame[y0:yf + 1, x0:xf + 1])
-            roiHistogram = getRGBHistogram(roi)
+            roiHistogram = getHistogram(roi)
             cv.imshow('roi', roi)
 
         # Draw ROI rectangle above copy frame readed because if draw above origin frame,
