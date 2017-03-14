@@ -2,6 +2,8 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -14,7 +16,6 @@ import numpy        as          np
 import cv2          as          cv
 from collections    import      deque
 from umucv.stream   import      mkStream
-
 
 programName = 'exercise04'          # Program name
 escKey = 27                         # Escape key code
@@ -47,20 +48,26 @@ def previousFrame(list):
 
 stream = mkStream(sz=(200,200), dev='0')    # Make a stream with size = (200,200) and dev = 0
 nframes = 9                                 # Num of frames
-for h in history(stream, nframes):
 
-    # Show history's frames
-    row1 = np.hstack([h[8],h[7],h[6]])
-    row2 = np.hstack([h[5],h[4],h[3]])
-    row3 = np.hstack([h[2],h[1],h[0]])
-    image = np.vstack([row1,row2,row3])
-    cv.imshow(programName, image)
+# Main function.
+def play():
+    for h in history(stream, nframes):
 
-    # Calculate differences between current frame and previous frame
-    diff = compareFrames(currentFrame(h),previousFrame(h))
+        # Show history's frames
+        row1 = np.hstack([h[8],h[7],h[6]])
+        row2 = np.hstack([h[5],h[4],h[3]])
+        row3 = np.hstack([h[2],h[1],h[0]])
+        image = np.vstack([row1,row2,row3])
+        cv.imshow(programName, image)
 
-    # If difference is bigger than 'maxDiff' -> A movement has been detected
-    if diff >= maxDiff:
-        print('I caught you!')
+        # Calculate differences between current frame and previous frame
+        diff = compareFrames(currentFrame(h),previousFrame(h))
 
-    if cv.waitKey(1) == escKey: break;
+        # If difference is bigger than 'maxDiff' -> A movement has been detected
+        if diff >= maxDiff:
+            print('I caught you!')
+
+        if cv.waitKey(1) == escKey: break;
+
+if __name__ == "__main__":
+    play()

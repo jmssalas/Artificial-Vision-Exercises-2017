@@ -2,6 +2,8 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -10,6 +12,8 @@
 ##################################
 
 import cv2 as cv
+
+programName = 'exercise01'          # Program's name
 
 cap = cv.VideoCapture(0)
 
@@ -30,4 +34,4 @@ while(cv.waitKey(1) != 27):
     copy = cv.cvtColor(hls, cv.COLOR_HLS2RGB)
     
     # Show image
-    cv.imshow('webcam',copy)
+    cv.imshow(programName,copy)

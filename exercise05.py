@@ -2,6 +2,8 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -10,8 +12,12 @@
 ## una cierta transformación de las imágenes tomadas con la cámara. Apóyate en server.py.
 ##################################
 
-#  $ ./server.py
-#  On browser:  http://localhost:5000/
+# $ ./server.py
+# On browser:
+# For gaussian blurring -> http://localhost:5000/transforms/gaussianBlur/<blurringFactor>
+# For convert to black&white -> http://localhost:5000/transforms/convertToBW
+# For threshold -> http://localhost:5000/transforms/threshold/<threshold>
+# For edges -> http://localhost:5000/transforms/edges/<thresholds> when thresholds='thresh1xthresh2' and thresh1 < thresh2
 
 import re
 import numpy            as np
@@ -78,7 +84,7 @@ def threshold(threshold):
 
 @app.route('/transforms/edges/<thresholds>')
 def edges(thresholds):
-    # Extract digits from request variable e.g thresh1xthresh2 and thresh1 < thresh2
+    # Extract digits from request variable, when 'thresh1xthresh2' and thresh1 < thresh2
     try:
         [threshMin, threshMax] = [int(s) for s in re.findall(r'\d+', thresholds)]
         # Check if range of thresholds is correct

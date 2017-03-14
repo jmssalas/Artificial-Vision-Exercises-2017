@@ -2,6 +2,9 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+# Press 'Enter' key for capture ROI
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -13,7 +16,7 @@
 import numpy             as np
 import cv2               as cv
 
-programName = 'exercise03'
+programName = 'exercise03'          # Program's name
 
 roi = None                          # ROI selected
 roiHistogram = None                 # ROI's histogram
@@ -28,10 +31,6 @@ xf, yf = -1, -1                     # ROI's Final position
 
 escKey = 27                         # Escape key code
 enterKey = 10                       # Enter key code
-
-R = 0                               # R channel
-G = 1                               # G channel
-B = 2                               # B channel
 
 
 # Function which get histogram of 'frame' param

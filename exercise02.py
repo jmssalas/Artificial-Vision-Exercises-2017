@@ -2,6 +2,10 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+# Press 'Enter' key for clean ROI
+# Press 's' key for store selected ROIs
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -13,6 +17,8 @@
 
 import cv2 as cv
 import datetime
+
+programName = 'exercise02'      # Program's name
 
 frame = None                    # Current Frame
 drawing, roi = False, False     # - 'drawing' indicates that ROI rectangle is drawing
@@ -54,9 +60,9 @@ def mouseEventHandler(event, x, y, flags, param):
             roiList.append(frame[y0:yf+1, x0:xf+1])
 
 # Set window's name
-cv.namedWindow("webcam")
+cv.namedWindow(programName)
 # Set mouseCallback to mouseEventHandler
-cv.setMouseCallback("webcam", mouseEventHandler)
+cv.setMouseCallback(programName, mouseEventHandler)
 
 # Main function. 
 # Default -> dev = 0
@@ -87,7 +93,7 @@ def play(dev=0):
             cv.rectangle(frame, (x0,y0), (xf, yf), color = (0,255,0))
 
         # Show frame
-        cv.imshow('webcam',frame)
+        cv.imshow(programName,frame)
 
         # Save ROI
         if key == ord('s'):
