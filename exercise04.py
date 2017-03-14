@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Code on Github repository: git@github.com:jmssalas/Artificial-Vision-Exercises-2017.git
+# Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
@@ -15,7 +15,6 @@ import cv2          as          cv
 from collections    import      deque
 from umucv.stream   import      mkStream
 
-from exercise03 import getHistogram
 
 programName = 'exercise04'          # Program name
 escKey = 27                         # Escape key code
@@ -47,7 +46,7 @@ def previousFrame(list):
 
 
 stream = mkStream(sz=(200,200), dev='0')    # Make a stream with size = (200,200) and dev = 0
-nframes = 9                                # Num of frames
+nframes = 9                                 # Num of frames
 for h in history(stream, nframes):
 
     # Show history's frames
