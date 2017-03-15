@@ -32,6 +32,7 @@ enterKey        = 10    # Enter key code
 upKey           = 82    # Up arrow key code
 downKey         = 84    # Down arroy key code
 
+# Filters
 Add_Sub         = 0     # Add and Subtract filter
 Mul_Div         = 1     # Multiplication and division filter
 Shift           = 2     # Shift filter
@@ -63,6 +64,52 @@ filtersSteps = {Add_Sub: 0.2, Mul_Div: 0.2, Shift: 1, HorizontalEdges: 1, Vertic
                 GaussianBlur: 1}
 
 
+roi = False                         # ROI selected
+drawing, lButtonUp = False, False   # - 'drawing' indicates that ROI rectangle is drawing
+                                    # - 'lButtonUp' indicates that when left button up event happens,
+                                    #    if mouse move event happens, then ROI rectangle doesn't change.
+
+initialPosition = -1
+
+x0, y0 = initialPosition, initialPosition   # ROI's Initial position
+xf, yf = initialPosition, initialPosition   # ROI's Final position
+
+# Mouse event handler
+def mouseEventHandler(event, x, y, flags, param):
+    global x0, y0, xf, yf, drawing, lButtonUp
+
+    if event == cv.EVENT_LBUTTONDOWN:  # Indicate init ROI rectangle
+        drawing = True
+        lButtonUp = False
+        x0, y0 = x, y
+        xf, yf = x0, y0
+
+    elif event == cv.EVENT_MOUSEMOVE:  # Indicate changes of ROI rectangles
+        if drawing and not lButtonUp:
+            xf, yf = x, y
+
+    elif event == cv.EVENT_LBUTTONUP:  # Indicate final ROI rectangle
+        if drawing:
+            xf, yf = x, y
+            # Check ROI's points sign
+            if yf < y0:
+                aux = y0; y0 = yf; yf = aux
+
+            if xf < x0:
+                aux = x0; x0 = xf; xf = aux
+
+            lButtonUp = True
+            roi = True
+
+# Set window's name
+cv.namedWindow(programName)
+# Set mouseCallback to mouseEventHandler
+cv.setMouseCallback(programName, mouseEventHandler)
+
+# Function which draw ROI selected above 'frame' param with
+# first vertex 'p0' and second vertex 'p1' and color 'color' param
+def drawROI(frame, p0, pf, color):
+    cv.rectangle(frame, p0, pf, color)
 
 
 # Get current frame converted to RGB
@@ -121,10 +168,9 @@ def processUpDownKeys(key, value, step=1.0):
 def applyConvMatrixAndShowResult(ker, img, value):
     # Apply convolution matrix
     filteredFrame = applyConvolutionMatrix(ker, img)
-    # Put text
-    putText(image=filteredFrame, text='value = ' + str(value), x=2, y=15)
-    # Show filtered frame
-    cv.imshow(programName, filteredFrame)
+    text = 'value = ' + str(value)
+
+    return filteredFrame, text
 
 
 # Get convolution matrix of 'filter' filter with 'ancle' ancle
@@ -183,10 +229,7 @@ def applyFilterAndShowResult(filter, img, value):
         filteredFrame = img
         text = 'value = ' + str(value)
 
-    # Put text
-    putText(image=filteredFrame, text=text, x=2, y=15)
-    # Show filtered frame
-    cv.imshow(programName, filteredFrame)
+    return filteredFrame, text
 
 
 # Apply 'filter' filter to captured frames of 'cap'
@@ -197,7 +240,7 @@ def applyFilter(cap, filter):
     value = checkFirstTime(filter=filter)
 
     # Set first time to false
-    firstTime[Add_Sub] = False
+    firstTime[filter] = False
 
     # Get input key
     key = getInputKey()
@@ -205,6 +248,9 @@ def applyFilter(cap, filter):
 
         # Convert frame to float gray
         fframe = getFrameConvertedToGray(cap=cap)
+
+        # Draw ROI
+        drawROI(frame=fframe, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
 
         # Process input key
         ancle = processUpDownKeys(key, value, step=filtersSteps[filter])
@@ -215,11 +261,18 @@ def applyFilter(cap, filter):
             ker, ancle = getConvolutionMatrix(filter=filter, ancle=ancle)
 
             # Apply convolution matrix and show result
-            applyConvMatrixAndShowResult(ker=ker, img=fframe, value=ancle)
+            filteredFrame, text = applyConvMatrixAndShowResult(ker=ker, img=fframe[y0:yf, x0:xf], value=ancle)
 
         else :
-            applyFilterAndShowResult(filter=filter, img=fframe, value=ancle)
+            filteredFrame, text = applyFilterAndShowResult(filter=filter, img=fframe[y0:yf, x0:xf], value=ancle)
 
+        # Update frame
+        fframe[y0:yf, x0:xf] = filteredFrame[:,:]
+
+        # Put text
+        putText(image=fframe, text=text, x=2, y=15)
+        # Show filtered frame
+        cv.imshow(programName, fframe)
 
         # Update values
         currentValues[filter], value = ancle, ancle
@@ -228,13 +281,13 @@ def applyFilter(cap, filter):
         key = getInputKey()
 
     # Set first time to true
-    firstTime[Add_Sub] = True
+    firstTime[filter] = True
 
 
 # Main function.
 # Default -> dev = 0
 def play(dev=0):
-    global firstTime
+    global x0,y0,xf,yf
 
     cap = cv.VideoCapture(dev)
 
@@ -243,8 +296,15 @@ def play(dev=0):
         # Get input key
         key = getInputKey()
 
+        # Get frame
+        frame = getFrameConvertedToGray(cap=cap)
+
         # Process input key
         if key == escKey: break
+
+        # Draw ROI
+        drawROI(frame=frame, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
+
 
         if key == filtersCodes[Add_Sub] :
             applyFilter(cap=cap, filter=Add_Sub)
@@ -267,9 +327,8 @@ def play(dev=0):
         if key == filtersCodes[GaussianBlur] :
             applyFilter(cap=cap, filter=GaussianBlur)
 
-        # Get frame
-        frame = getFrame(cap=cap)
-        cv.imshow(programName, rgb2bgr(frame))
+        # Show frame
+        cv.imshow(programName, frame)
 
 
 if __name__ == "__main__":
