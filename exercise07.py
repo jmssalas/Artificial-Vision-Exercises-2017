@@ -2,6 +2,8 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
+# Press 'Esc' key for exit
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
@@ -16,3 +18,5 @@ import numpy             as np
 import cv2               as cv
 
 programName = 'exercise07'
+
+escKey = 27                         # Escape key code
