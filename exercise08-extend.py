@@ -10,6 +10,8 @@
 # Press 'e' key for vertical edges filter
 # Press 'f' key for mean blurring filter
 # Press 'g' key for gaussian blurring filter
+# Use mouse for select ROI
+
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
@@ -76,7 +78,7 @@ xf, yf = initialPosition, initialPosition   # ROI's Final position
 
 # Mouse event handler
 def mouseEventHandler(event, x, y, flags, param):
-    global x0, y0, xf, yf, drawing, lButtonUp
+    global x0, y0, xf, yf, drawing, lButtonUp, roi
 
     if event == cv.EVENT_LBUTTONDOWN:  # Indicate init ROI rectangle
         drawing = True
@@ -250,7 +252,8 @@ def applyFilter(cap, filter):
         fframe = getFrameConvertedToGray(cap=cap)
 
         # Draw ROI
-        drawROI(frame=fframe, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
+        if roi :
+            drawROI(frame=fframe, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
 
         # Process input key
         ancle = processUpDownKeys(key, value, step=filtersSteps[filter])
@@ -261,13 +264,19 @@ def applyFilter(cap, filter):
             ker, ancle = getConvolutionMatrix(filter=filter, ancle=ancle)
 
             # Apply convolution matrix and show result
-            filteredFrame, text = applyConvMatrixAndShowResult(ker=ker, img=fframe[y0:yf, x0:xf], value=ancle)
-
+            if roi :
+                filteredFrame, text = applyConvMatrixAndShowResult(ker=ker, img=fframe[y0:yf, x0:xf], value=ancle)
+            else :
+                fframe, text = applyConvMatrixAndShowResult(ker=ker, img=fframe, value=ancle)
         else :
-            filteredFrame, text = applyFilterAndShowResult(filter=filter, img=fframe[y0:yf, x0:xf], value=ancle)
+            if roi :
+                filteredFrame, text = applyFilterAndShowResult(filter=filter, img=fframe[y0:yf, x0:xf], value=ancle)
+            else :
+                fframe, text = applyFilterAndShowResult(filter=filter, img=fframe, value=ancle)
 
         # Update frame
-        fframe[y0:yf, x0:xf] = filteredFrame[:,:]
+        if roi :
+            fframe[y0:yf, x0:xf] = filteredFrame[:,:]
 
         # Put text
         putText(image=fframe, text=text, x=2, y=15)
@@ -303,7 +312,8 @@ def play(dev=0):
         if key == escKey: break
 
         # Draw ROI
-        drawROI(frame=frame, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
+        if roi :
+            drawROI(frame=frame, p0=(x0, y0), pf=(xf, yf), color=(0, 255, 0))
 
 
         if key == filtersCodes[Add_Sub] :

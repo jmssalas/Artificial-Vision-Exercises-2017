@@ -64,18 +64,6 @@ firstTime = {Add_Sub: True, Mul_Div: True, Shift: True, HorizontalEdges: True, V
 filtersSteps = {Add_Sub: 0.2, Mul_Div: 0.2, Shift: 1, HorizontalEdges: 1, VerticalEdges: 1, MeanBlurring: 1,
                 GaussianBlur: 1}
 
-roi = None                          # ROI selected
-roiHistogram = None                 # ROI's histogram
-maxDiff = 0.2                       # Max difference between ROI selected and current frame
-
-drawing, lButtonUp = False, False   # - 'drawing' indicates that ROI rectangle is drawing
-                                    # - 'lButtonUp' indicates that when left button up event happens,
-                                    #    if mouse move event happens, then ROI rectangle doesn't change.
-
-x0, y0 = -1, -1                     # ROI's Initial position
-xf, yf = -1, -1                     # ROI's Final position
-
-
 # Get current frame converted to RGB
 def getFrame(cap):
     ret, frame = cap.read()

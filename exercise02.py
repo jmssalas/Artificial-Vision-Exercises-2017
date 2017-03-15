@@ -5,6 +5,7 @@
 # Press 'Esc' key for exit
 # Press 'Enter' key for clean ROI
 # Press 's' key for store selected ROIs
+# Use mouse for select ROI
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)

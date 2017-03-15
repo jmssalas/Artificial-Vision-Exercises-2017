@@ -4,6 +4,7 @@
 
 # Press 'Esc' key for exit
 # Press 'Enter' key for capture ROI
+# Use mouse for select ROI
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
