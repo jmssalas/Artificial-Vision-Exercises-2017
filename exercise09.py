@@ -33,14 +33,14 @@ xf, yf = initialPosition, initialPosition   # ROI's Final position
 # Key's code
 escKey      = 27        # Escape key code
 enterKey    = 10        # Enter key code
-saveKey     = ord('s')
+saveKey     = ord('s')	# Save key code
 
 
 method  = cv.xfeatures2d.SIFT_create()  # Keypoints method
 bf      = cv.BFMatcher()                # Matcher
 
-models = list()
-minMatches = 5
+models = list()							# List of models
+minMatches = 5							# Minimum matches between frame and model
 
 # Function which update minMatches from trackbar
 def update(v):
@@ -116,6 +116,7 @@ def getBetterMatches(desc1, desc2):
 
     return good
 
+# Function which processes current 'frame' searching matches with models
 def processFrame(frame):
     numModel = 1    # Number of closer model for show it
 
