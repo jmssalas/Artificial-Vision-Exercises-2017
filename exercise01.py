@@ -24,14 +24,14 @@ while(cv.waitKey(1) != 27):
     copy = frame.copy()
 
     # Convert RGB to HLS
-    hls = cv.cvtColor(copy,cv.COLOR_RGB2HLS)
+    hls = cv.cvtColor(copy,cv.COLOR_BGR2HLS)
     
     # Modify L and S channels
     hls[:,:,2] = 255
     hls[:,:,1] = 128
 
     # Convert HLS to RGB
-    copy = cv.cvtColor(hls, cv.COLOR_HLS2RGB)
+    copy = cv.cvtColor(hls, cv.COLOR_HLS2BGR)
     
     # Show image
     cv.imshow(programName,copy)

@@ -1,0 +1,344 @@
+\documentclass[a4paper,10pt,titlepage,oneside,openright]{book}
+	 \textheight = 24cm
+	 \textwidth = 18cm
+	 \topmargin = -1cm
+	 \oddsidemargin = -1cm
+	 
+\input{header.tex}
+	
+\graphicspath{ {images/} } %Indicamos la carpeta donde están las imágenes
+
+\newcounter{ejemplo} % Contador para los ejemplos
+%\addtocounter{ejemplo}{1} % Sumamos 1
+
+
+\begin{document}
+%--------------------------------------------------------------------
+\thispagestyle{empty}
+\begin{figure}[h]
+\includegraphics[scale=0.4]{logo-umu.jpg} \hspace{100mm}
+\includegraphics[scale=0.2]{logo-fium.png}
+\centering
+\end{figure}
+
+\vspace{15mm}
+
+\begin{center}
+\rule{150mm}{0.1mm} \\
+\vspace{5mm}
+\begin{Huge}
+ \textsc{Universidad de Murcia}\\ \vspace{10mm}
+\end{Huge}
+\begin{huge}
+ \textsc{Facultad de Informática}
+\end{huge}
+\vspace{5mm} \\
+\rule{150mm}{0.5mm}
+
+\vspace{10mm}
+
+\begin{Huge}
+  \textsc{| Visión Artificial |} \\ \vspace{10mm}
+\end{Huge}
+
+\begin{LARGE}
+ Documentación Ejercicios\\ \vspace{3mm}
+ {\large 2016/2017}
+\end{LARGE}
+
+\vspace{25mm}
+
+\begin{Large}
+\begin{center}
+\begin{tabular}{ccc}
+\textbf{Autor} & ~ & \textbf{Profesor}\\
+José María Sánchez Salas & ~ & Alberto Ruíz García\\
+\textit{josemaria.sanchez12@um.es} & ~ & \textit{arui<@um.es}
+\end{tabular}
+\end{center}
+\end{Large}
+\end{center}
+%--------------------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\section*{}
+\newpage
+
+\thispagestyle{empty}
+
+\tableofcontents
+\addtocontents{toc}{\textbf{Documentación Ejercicios 2016-2017}}
+
+\newpage
+\thispagestyle{empty}
+\section*{}
+\newpage
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{Documentación Ejercicios 2016-2017}
+\fancyhead[RE,LO]{Visión Artificial}
+\fancyfoot[CE,CO]{\thepage}
+
+% \lhead[]{} - \chead[]{} - \rhead[]{}
+\renewcommand{\headrulewidth}{0.5pt} % --> Definimos el grosor de la línea
+\renewcommand{\footrulewidth}{0.5pt}
+
+%--------------------------------------------------------------------
+\medskip
+\section{Introducción}
+Este documento contiene la documentación de los ejercicios propuestos, así como de algunos expermientos realizados, de la asignatura Visión Artificial perteneciente a la mención de Computación del Grado de Ingeniería en Informática, impartido en la Facultad de Informática de la Universidad de Murcia en el curso académico 2016-2017. \\
+
+La estructura de este documento es la siguiente: la primera sección contiene las explicaciones de los ejercicios propuestos, mientras que la segunda sección contiene las explicaciones de los experimentos que realizados, haciendo uso de lo aprendido en los ejercicios. \\
+
+Es importante destacar, que \textbf{para todos los ejercicios}, para cerrar el programa hay que pulsar la tecla Escape (\texttt{Esc}), por eso mismo, en la resolución de los ejercicios, si es necesaria la pulsación de teclas, no se va a exponer el uso de esta tecla.
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\section{Ejercicios Propuestos}
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 1}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Modificación de los canales de color (brillo, saturación, etc.) sobre la secuencia de imágenes tomada con la webcam.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Este ejercicio ha sido resuelto de la siguiente manera: una vez capturada la imagen de la cámara, se hace una copia para evitar modificar la imagen obtenida, se cambia el espacio de color a HLS, se modifican los canales L y S, se convierte al espacio de color BGR y se muestra la imagen modificada.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 2}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Amplía \texttt{player.py} para seleccionar con el ratón una región de interés (ROI) y almacenar en una lista imágenes, que pueden opcionalmente guardarse en disco. Este programa nos servirá como base para futuros ejercicios.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Lo más importante de este ejercicio es cómo seleccionar una región de interés de la webcam. Para ello, hay que introducir un manejador de eventos de ratón; este manejador hace lo siguiente: cuando se pulsa el botón izquierdo, almacena las coordenadas del ratón como coordenadas iniciales del ROI, además se indica que se inicia el dibujo del ROI; mientras no se levante el botón, si se mueve el ratón, se van almacenando como coordenadas finales del ROI las coordenadas donde está el ratón, esto se hace así, para poder ir dibujando el ROI conforme se va creando; una vez que se levante el botón izquierdo, se almacena definitivamente las coordenadas finales y se añade, automáticamente dicho ROI a la lista de ROIs. \\
+
+El programa principal, lo único que hace es: ver si se ha pulsado alguna tecla (y si es así, hacer la acción correspondiente); si se ha iniciado el dibujo del ROI, dibujarlo; mostrar la imagen de la cámara. \\
+
+Las teclas que se procesan en este programa son:
+\begin{itemize}
+ \item Tecla \texttt{Enter}: Para eliminar el dibujo del ROI.
+ \item Tecla \texttt{Espacio}: Para parar la webcam en una imagen.
+ \item Tecla \texttt{s}: Para almacenar en disco los ROIs almacenados.
+\end{itemize}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 3}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Construye un clasificador de objetos en base a la similitud de los histogramas de color del ROI (de los 3 canales por separado).
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Haciendo uso del ejercicio anterior, la resolución de este ejercicio se basa simplemente en una vez seleccionado el ROI, se calcula y almacena su histograma, para comparar con el histograma del ROI de la imagen actual y si supera un determinado valor (variable global \texttt{maxDiff}), cambiar el color del ROI a azul, indicando es similar al ROI almacenado. \\
+
+Las teclas que se procesan en este programa son:
+\begin{itemize}
+ \item Tecla \texttt{Enter}: Para seleccionar el ROI y calcular su histograma.
+ \item Tecla \texttt{Espacio}: Para parar la webcam en una imagen.
+\end{itemize}
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 4}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Construye un generador que detecte frames estáticos, o frames en movimiento, a partir de una secuencia de imágenes.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Para la resolución de este ejercicio se ha hecho uso de la librería \texttt{umucv} proporcionada por el profesor, para crear un historial de las 9 últimas imágenes y mostrarlas de manera conjunta para que se vea el paso de los movimientos. Sin embargo, el cálculo para detectar movimiento, se hace únicamente con la imagen actual y la anterior. Una vez obtenidas la imagen actual y la anterior, se hace la diferencia entre ellas y si supera un determinado valor (variable global \texttt{maxDiff}), el programa muestra por terminal el mensaje \texttt{I caught you!}, indicando que ha habido movimiento.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 5}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Construye un servidor web sencillo usando \texttt{flask} que muestre una cierta transformación de las imágenes tomadas con la cámara.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Este ejercicio proporciona las siguientes transformaciones de imágenes:
+\begin{itemize}
+ \item \textbf{Suavizado Gaussiano}. La dirección para realizar esta transformación es: \\\texttt{http://localhost:5000/transforms/gaussianBlur/<blurringFactor>} donde \texttt{blurringFactor} es el factor de suavizado con el que realizar la transformación. Este factor debe ser numérico, si no lo es, el servidor da un error.
+ \item \textbf{Conversión a blanco y negro}. La dirección para realizar esta transformación es: \\\texttt{http://localhost:5000/transforms/convertToBW}. 
+ \item \textbf{Umbralización}. La dirección para realizar esta transformación es: \\\texttt{http://localhost:5000/transforms/threshold/<threshold>} donde \texttt{threshold} es el umbral con el que realizar la umbralización. Este umbral debe ser numérico, si no lo es, el servidor da un error.
+ \item \textbf{Bordes}. La dirección para realizar esta transformación es: \\\texttt{http://localhost:5000/transforms/edges/<thresholds>} donde \texttt{thresholds} son los umbrales necesarios para la transformación de bordes \texttt{Canny}. El formato de los umbrales es: \texttt{thresh1xthresh2}, donde \texttt{thresh1 < thresh2}. Ambos umbrales deben ser numéricos y cumplirse la condición anterior, si no es así, el servidor da un error.
+\end{itemize}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 6}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Implementar el efecto chroma con imágenes en vivo de la webcam. Pulsando una tecla se captura el fondo y los objetos que aparezcan se superponen en otra imagen o secuencia de video.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+La tecla para capturar el fondo es la tecla \texttt{Enter}. Tras pulsar esta tecla, el programa captura el fondo, crea el chroma y pone los objetos que aparezcan en la imagen \texttt{cube3.png}. Una característica interesante de este programa, es que proporciona un slider para ajustar el umbral con el que hacer el chroma. \\
+
+Para hacer el chroma, tanto el fondo como la imagen actual se pasan al espacio de color YUV para eliminar la luminosidad y quedarnos con el color y la saturación, para así poder hacer un chroma más efectivo. 
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 7}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Implementa la segmentación por color usando modelos de histograma en un programa que admite como argumento:
+\begin{enumerate}
+ \item[a)] una carpeta con trozos de imagen que sirven como muestras de color y
+ \item[b)] otra imagen que deseamos clasificar.
+\end{enumerate}
+
+El resultado puede ser un conjunto de máscaras para cada clase, o una "imagen de etiquetas", donde diferentes colores indican cada una de las regiones.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+La ejecución de este programa debe ser: \texttt{./exercise07.py [-h] models image}, donde:
+\begin{itemize}
+ \item \texttt{[-h]} es una opción para mostrar la ayuda.
+ \item \texttt{models} es la carpeta que contiene los modelos de color.
+ \item \texttt{image} es la imagen que se quiere segmentar.
+\end{itemize}
+
+Tras ejecutar correctamente el programa, este cargará los modelos (como color del modelo, se obtiene el color medio de todo el modelo), leerá la imagen y segmentará la imagen. Para segmentar la imagen, lo que hace es obtener las diferencias con todos los modelos, obtener para cada diferencia, el modelo más cercano con él, segmentar la imagen. Una vez terminado, el programa mostrará la imagen original y la imagen segmentada en color. No se tratan todos los píxeles de la imagen, pues se filtran aquellos píxeles que no pertenecen a ningún modelo. \\
+
+Los modelos y las imágenes para la ejecución de este ejercicio están en la carpeta \texttt{exercise07}
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 8}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Mostrar el efecto de diferentes filtros de imagen sobre la imagen en vivo de la webcam, seleccionando con el teclado el filtro deseado y permitiendo modificar sus posibles parámetros (p.ej. el nivel de suavizado) con las teclas de flecha.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+La realización de este ejercicio se ha hecho de la siguiente manera: puesto que todos los filtros deben de tener una tecla particular para aplicarse, todos tienen un valor inicial para poder realizar el filtro, un valor actual con el que se aplica el filtro, y para poder modificarse con las teclas de flechas, todos tienen sus valores de ``paso'' para modificar el valor actual del filtro; he decidido crear diccionarios con cada propiedad anterior: tecla del filtro, valor inicial, valor actual y valor de paso. \\
+
+De esta manera, lo que consigo, es que en el código para la aplicación del filtro solamente trabaje con esos diccionarios y con una variable que indica el filtro a aplicar. Es decir, esté desacoplado al filtro real a aplicar. El programa principal, lo único de lo que se encarga es de procesar las teclas pulsadas para la aplicación del filtro correspondiente. \\
+
+Este programa se diferencia de los anteriores en que, una vez que se aplica un filtro, para salir de él hay que pulsar la tecla \texttt{Esc}. Esto hace que se deje de aplicar el filtro y aparecerá otra vez la imagen de la cámara original, listo para aplicar otro filtro. Para salir del programa, es necesario pulsar la tecla anterior cuando se encuentre la imagen de la camara original.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsubsection{Extensión}
+La extensión del ejercicio 8 consiste en permitir aplicar los filtros a un ROI seleccionado y mostrar la imagen normal y el ROI con el filtro aplicado. De esta manera, se puede comparar el efecto de los filtros con la imagen original.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 9}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Reconocimiento de objetos con la webcam basado en el número de coincidencias de keypoints. Pulsando una tecla se pueden ir guardando modelos (p. ej. carátulas de CD). Cuando detectamos que la imagen está bastante quieta, o cuando se pulse otra tecla, calculamos los puntos de interés de la imagen actual y sus descriptores y vemos si hay suficientes coincidencias con los de algún modelo.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Este ejercicio proporciona la siguiente funcionalidad con el teclado:
+\begin{itemize}
+ \item Tecla \texttt{s}: para almacenar el modelo que hay en el ROI seleccionado.
+ \item Tecla \texttt{Enter}: para procesar la imagen actual en busca de los modelos seleccionados.
+\end{itemize}
+
+El programa, conforme se van seleccionando modelos, va mostrando el último modelo almacenado. Una vez que se quiera procesar la imagen actual, entonces, procesa la imagen en busca de los modelos, si alguno supera el mínimo de coincidencias (variable \texttt{minMatches} que se puede ajustar en el slider que aparece encima de la imagen principal), entonces se muestra en otra ventana la imagen del modelo con el que ha coincidido.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 10}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Reconocimiento de formas con la webcam (o sobre un conjunto de imágenes) basado en descriptores frecuenciales.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Este programa se debe ejecutar de la siguiente manera: \texttt{./exercise10.py [-h] [-d DEV] templates labels}, donde:
+\begin{itemize}
+ \item \texttt{[-h]} es la opción de ayuda.
+ \item \texttt{[-d DEV]} es la opción para indicar otro dispositivo de webcam (por defecto es el 0) o un directorio donde se encuentran las imágenes que se quieren procesar.
+ \item \texttt{templates} es la imagen que contiene los modelos.
+ \item \texttt{labels} son las etiquetas asociadas a cada modelo.
+\end{itemize}
+
+Este programa permite procesar tanto imágenes tomadas de la webcam como de un conjunto de imágenes (dentro de un directorio). Para el procesar las imágenes tomadas por la webcam, es necesario que se seleccione el ROI y se pulse la tecla \texttt{Enter} para procesarlo. En cambio, para la secuencia de imágenes, se procesa cada imagen completamente. El procesamiento de cada imagen se hace por separado, pulsando la tecla \texttt{n} se permite procesar la siguiente imagen. \\
+
+En ambos casos, el programa, cuando procesa la imagen, muestra por consola el resultado obtenido. Una cosa importante a tener en cuenta en este ejercicio, es que como se pueden producir falsos positivos, estos se intercalan en la salida, por lo que suelen ensuciar el resultado obtenido.
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 11}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 12}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\section{Experimentos}
+Los experimentos que se han llevado a cabo se encuentran en la carpeta \texttt{experiments}.
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Reconocedor de matrículas de coche}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Programa de reconocimiento de matrículas con la webcam.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Haciendo uso del ejercicio 10, se ha desarrollado este programa para reconocer matrículas de coche con la webcam. Para ello, primero se ha de seleccionar un ROI de la imagen, para después pulsar la tecla \texttt{Enter} y procesarlo. Hace uso de los modelos \texttt{platetemplates.jpg} que proporcionó el profesor y que se encuentra en la carpeta \texttt{images}
+
+
+
+\end{document}

@@ -9,10 +9,10 @@
 ## -------------------------------
 ##
 ## Construye un servidor web sencillo usando flask que muestre
-## una cierta transformación de las imágenes tomadas con la cámara. Apóyate en server.py.
+## una cierta transformación de las imágenes tomadas con la cámara.
 ##################################
 
-# $ ./server.py
+# $ ./exercise05.py
 # On browser:
 # For gaussian blurring -> http://localhost:5000/transforms/gaussianBlur/<blurringFactor>
 # For convert to black&white -> http://localhost:5000/transforms/convertToBW

@@ -11,7 +11,7 @@
 ##
 ## Implementar el efecto chroma con imágenes en vivo de la webcam.
 ## Pulsando una tecla se captura el fondo y los objetos que aparezcan
-## se superponen en otra imagen o secuencia de video. Comparar con backsub.py.
+## se superponen en otra imagen o secuencia de video.
 ##################################
 
 import numpy            as np

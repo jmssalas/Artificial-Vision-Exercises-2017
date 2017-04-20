@@ -2,7 +2,7 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
-# Press 'Esc' key for exit
+# Press 'Esc' key for exit program or filter
 # Press 'a' key for add and subtract filter
 # Press 'b' key for multiplication and division filter
 # Press 'c' key for shift filter
@@ -10,6 +10,7 @@
 # Press 'e' key for vertical edges filter
 # Press 'f' key for mean blurring filter
 # Press 'g' key for gaussian blurring filter
+# Press upArrow and downArrow for increase or decrease values of filters
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)

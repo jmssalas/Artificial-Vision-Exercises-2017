@@ -9,7 +9,7 @@
 ## -------------------------------
 ##
 ## Construye un generador que detecte frames estáticos,
-## o frames en movimiento, a partir de una secuencia de imágenes. Apóyate en 'deque.py'.
+## o frames en movimiento, a partir de una secuencia de imágenes.
 ##################################
 
 import numpy        as          np

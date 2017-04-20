@@ -11,7 +11,7 @@
 ## -------------------------------
 ##
 ## Construye un clasificador de objetos en base a la similitud de
-## los histogramas de color del ROI (de los 3 canales por separado). Apóyate en exercise02.
+## los histogramas de color del ROI (de los 3 canales por separado).
 ##################################
 
 import numpy             as np

@@ -4,6 +4,7 @@
 
 # Press 'Esc' key for exit
 # Press 'Enter' key for process frame
+# Press 's' key for save model
 # Use mouse for select ROI
 
 ##################################
