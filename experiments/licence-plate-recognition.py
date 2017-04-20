@@ -152,7 +152,7 @@ def processFrame(frame, models, labels, feats):
     cv.imshow('roi', g)
 
     # Extract contours
-    things = extractContours(g, holes=True)
+    things = sorted(extractContours(g, holes=True), key=lambda x: x[0,0])
 
     print('The licence plate is: ')
     for x in things:
@@ -171,7 +171,7 @@ def play(dev=0):
     cap = cv.VideoCapture(dev)
 
     # Labels and templates
-    labels = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    labels = "0123456789ABCDEFGHIJKLMNOPRSTUVWXYZ"
     templates = 'platestemplates.jpg'
 
     # Load models and its invariant features

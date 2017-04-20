@@ -4,26 +4,72 @@
 
 # Press 'Esc' key for exit
 # Press 'Enter' key for process ROI
-# Use mouse for select ROI
+# For folder with images mode: press 'n' key for next image
+#
+# Execute: ./exercise10.py [-h] [-d DEV] templates labels
+# where:
+#   - templates is an image which contains the template models
+#   - labels is a string with labels of template models
+# options:
+#   - [-h] for help
+#   - [-d DEV] for indicate device of program: folder with images or webcam device (default: webcam 0)
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
 ##
-## Reconocimiento de formas con la webcam basado en descriptores frecuenciales.
+## Reconocimiento de formas con la webcam (o sobre un conjunto de imágenes)
+## basado en descriptores frecuenciales.
 ##################################
 
 import numpy             as np
 import numpy.fft         as fft
 import cv2               as cv
+import argparse
 
+from    os.path          import isfile, isdir
+from    umucv.stream     import mkStream
+
+# Parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('templates', help='Image which contains the template models')
+parser.add_argument('labels', help='Labels of template models')
+parser.add_argument('-d', '--dev', type=str, help='Device of program: folder with images or webcam device')
+parser.print_help()
+args = parser.parse_args()
+
+# Check if 'templates' param is not a file. If it's not file, then exit
+if not isfile(args.templates) :
+    print('Error: {} is not a file'.format(args.templates))
+    exit(-1)
+
+
+stream = None       # Stream of images
+isWebCam = True     # Indicate if stream is a webcam or images collection
+
+# Check if -d option has been put and is not numeric -> Folder with images selected
+if args.dev and not args.dev.isnumeric():
+    # Check if it is a folder
+    if not isdir(args.dev):
+        print('Error: {} is not a dir'.format(args.dev))
+        exit(-1)
+
+    # Create stream
+    stream = mkStream(dev='glob:'+args.dev+'*')
+    # Set isWebCan to False
+    isWebCam = False
+elif args.dev: # If it is numeric -> device selected
+
+    stream = mkStream(dev=args.dev)
+else: # If it has not been put, default : device 0
+    stream = mkStream(dev='0')
 
 programName = 'exercise10'   # Program name
 
 # Key's code
-escKey          = 27    # Escape key code
-enterKey        = 10    # Enter key code
-
+escKey          = 27        # Escape key code
+enterKey        = 10        # Enter key code
+nextFrame       = ord('n')  # Next frame code
 
 drawing, lButtonUp = False, False   # - 'drawing' indicates that ROI rectangle is drawing
                                     # - 'lButtonUp' indicates that when left button up event happens,
@@ -88,15 +134,14 @@ def extractContours(g, minlen=50, holes=False):
         mode = cv.RETR_CCOMP
     else:
         mode = cv.RETR_EXTERNAL
-
-    gt = cv.adaptiveThreshold(g, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 101, -10)
-    a, contours, b = cv.findContours(gt.copy(), mode, cv.CHAIN_APPROX_NONE)
-    ok = [fixOrientation(c.reshape(len(c), 2)) for c in contours if cv.arcLength(c, closed=True) >= minlen]
+    gt = cv.adaptiveThreshold(g,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY,101,-10)
+    a,contours,b = cv.findContours(gt.copy(), mode ,cv.CHAIN_APPROX_NONE)
+    ok = [fixOrientation(c.reshape(len(c),2)) for c in contours if cv.arcLength(c,closed=True) >= minlen]
     return ok
 
 
 def readbgr(file):
-    return cv.imread('images/'+file)
+    return cv.imread(file)
 
 def bgr2gray(x):
     return cv.cvtColor(x,cv.COLOR_BGR2GRAY)
@@ -124,10 +169,6 @@ def mindist(c,mods,labs):
 def getInputKey():
     return cv.waitKey(1) & 0xFF
 
-# Get current frame
-def getFrame(cap):
-    ret, frame = cap.read()
-    return frame #cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
 # Load models and calculate invariant features of models
 # Return (models, feats)
@@ -151,10 +192,10 @@ def processFrame(frame, models, labels, feats):
 
     cv.imshow('roi', g)
 
-    # Extract contours
-    things = extractContours(g, holes=True)
+    # Extract contours sorted by X coordinate
+    things = sorted(extractContours(g, holes=True), key=lambda x: x[0,0])
 
-    print('The licence plate is: ')
+    print('The result is: ')
     for x in things:
         d, l = mindist(invar(x), feats, labels)[0]
         if d < 0.10:
@@ -163,28 +204,16 @@ def processFrame(frame, models, labels, feats):
     print('\n')
 
 
-
-
-def play(dev=0):
+# Function which execute webCamMode
+def webCamMode(models, labels, feats):
     global lButtonUp, drawing, x0, xf, y0, yf
 
-    cap = cv.VideoCapture(dev)
-
-    # Labels and templates
-    labels = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    templates = 'platestemplates.jpg'
-
-    # Load models and its invariant features
-    models, feats = loadModels(image=templates)
-
-    while True:
+    for frame in stream:
         # Get input key
         key = getInputKey()
 
         # Process input key
         if key == escKey: break
-
-        frame = getFrame(cap=cap)
 
         # Press 'Enter' key for process current frame
         if key == enterKey:
@@ -206,6 +235,38 @@ def play(dev=0):
 
         # Show frame
         cv.imshow(programName, frame)
+
+
+# Function which execute imageMode
+def imageMode(models, labels, feats):
+
+    for frame in stream:
+        # Process frame
+        processFrame(frame=frame, models=models, labels=labels, feats=feats)
+
+        while True:
+            key = getInputKey()
+
+            if key == nextFrame or key == escKey: break;
+
+            # Show frame
+            cv.imshow(programName, frame)
+
+        if key == escKey: break;
+
+def play():
+
+    # Labels and templates
+    labels = args.labels
+    templates = args.templates
+
+    # Load models and its invariant features
+    models, feats = loadModels(image=templates)
+
+    if isWebCam :
+        webCamMode(models, labels, feats)
+    else:
+        imageMode(models, labels, feats)
 
 
 if __name__ == "__main__":
