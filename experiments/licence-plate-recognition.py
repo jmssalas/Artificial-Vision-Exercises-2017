@@ -10,7 +10,7 @@
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------
 ##
-## Reconocimiento de formas con la webcam basado en descriptores frecuenciales.
+## Programa de reconocimiento de matrículas con la webcam.
 ##################################
 
 import numpy             as np
@@ -18,7 +18,7 @@ import numpy.fft         as fft
 import cv2               as cv
 
 
-programName = 'exercise10'   # Program name
+programName = 'licence-plate-recognition'   # Program name
 
 # Key's code
 escKey          = 27    # Escape key code
