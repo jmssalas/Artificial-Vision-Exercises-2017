@@ -6,6 +6,11 @@
 # the next images will go to sides.
 # Create a panoramic of 2000x600 pixels
 
+# Execute: ./exercise12.py [-h] folder
+# where:
+#   - folder is folder which contains the images for the panoramic
+# Use -h option for help
+
 # Press 'Esc' key for exit
 
 ##################################

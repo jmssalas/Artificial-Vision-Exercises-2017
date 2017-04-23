@@ -8,6 +8,12 @@
 # Press 'c' key for clear all points
 # Use mouse for select points
 
+# Execute: ./exercise11.py [-h] source reference
+# where:
+#   - source is the source image
+#   - reference is the reference image
+# Use -h option for help
+
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
 ## -------------------------------

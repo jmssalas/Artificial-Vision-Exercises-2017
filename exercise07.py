@@ -7,7 +7,7 @@
 # where:
 #   - models is folder which contains the color models
 #   - image is image's file
-# Use -h options for help
+# Use -h option for help
 
 ##################################
 ## PROBLEM STATEMENT (IN SPANISH)
