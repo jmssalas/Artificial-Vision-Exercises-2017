@@ -2,7 +2,7 @@
 
 # Code on Github repository: https://github.com/jmssalas/Artificial-Vision-Exercises-2017
 
-# Press 'Esc' key for exit
+# Press 'Esc' key for exit of program or exit of oneFaceMode
 # Press 'f' key for entry in oneFaceMode
 # Use mouse for select face in oneFaceMode
 

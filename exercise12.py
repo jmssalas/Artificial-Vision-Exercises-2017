@@ -8,7 +8,7 @@
 
 # Execute: ./exercise12.py [-h] folder
 # where:
-#   - folder is folder which contains the images for the panoramic
+#   - folder is the folder which contains the images for the panoramic
 # Use -h option for help
 
 # Press 'Esc' key for exit

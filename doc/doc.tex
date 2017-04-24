@@ -53,7 +53,7 @@
 \begin{tabular}{ccc}
 \textbf{Autor} & ~ & \textbf{Profesor}\\
 José María Sánchez Salas & ~ & Alberto Ruíz García\\
-\textit{josemaria.sanchez12@um.es} & ~ & \textit{arui<@um.es}
+\textit{josemaria.sanchez12@um.es} & ~ & \textit{aruiz@um.es}
 \end{tabular}
 \end{center}
 \end{Large}
@@ -322,7 +322,7 @@ Rectifica la imagen de un plano para medir distancias (tomando referencias manua
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
-Este ejercicio se ha planteado de la siguiente manera: teniendo en cuenta que no era muy lógico hacer un programa que solamente rectificara la imagen de las monedas \texttt{coins.png} o la de la falta \texttt{falta2.jpg}, ya que para cada caso concreto se necesita una imagen de referencia concreta para poder hacer la rectificación; se ha hecho de tal manera que el programa reciba por parámetros la imagen que se quiere rectificar y la imagen que va a usar como referencia. De esta manera, el programa mostrará ambas imágenes para que el usuario pueda tomar los puntos de referencia de cada una. \\
+Este ejercicio se ha planteado de la siguiente manera: teniendo en cuenta que no era muy lógico hacer un programa que solamente rectificara la imagen de las monedas \texttt{coins.png} o la de la falta \texttt{falta2.jpg}, ya que para cada caso concreto se necesita una imagen de referencia concreta para poder hacer la rectificación; se ha hecho de tal manera que el programa reciba por parámetros la imagen que se quiere rectificar y la imagen que va a usar como referencia. De esta manera, el programa es independiente de la imagen que se quiera rectificar y mostrará ambas imágenes para que el usuario pueda tomar los puntos de referencia de cada una. \\
 
 Para la toma de los puntos de referencia, en todas las ventanas, se hace clickando con el ratón en la posición que se quiera. Una vez seleccionado el punto, este no se podrá mover ni eliminar, así que hay que tener cuidado a la hora de elegir los puntos. Sin embargo, el programa tiene la funcionalidad de eliminar todos los puntos escogidos (tecla \texttt{c} que se mencionará más abajo). También es importante saber que para que funcione, el número de puntos elegidos en la imagen original y la de referencia debe ser el mismo (si no, el programa terminará con un mensaje de error, indicando el por qué); y la correspondencia entre dichos puntos es por orden de selección, es decir: el punto \texttt{p1} de la imagen original se corresponde con el punto \texttt{p1} de la imagen de referencia, y así con todos los puntos. \\
 
@@ -363,6 +363,17 @@ Crea automáticamente un mosaico panorámico ajustando varias imágenes ($>2$). 
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
+Siguiendo la misma idea que en el ejercicio anterior, este ejercicio se ha realizado para que reciba como argumento del programa un directorio donde están almacenadas todas las imágenes con las que se quiera hacer la panorámica. Es importante destacar que para que la panorámica salga centrada, las imágenes deben seguir un orden concreto (por nombre): la primera imagen debe ser la que irá en el centro de la panorámica, las dos siguientes son aquellas fotos que van a derecha e izquierda (da igual el orden) de la central, las dos siguientes son aquellas que: una va a la derecha de la imagen derecha anterior y la otra va a la izquierda de la imagen izquierda anterior, y así sucesivamente. De esta manera, el programa lo que va haciendo es construir la panorámica desde el centro hacia los lados. \\
+
+Debido a que este programa hace uso del cálculo de puntos de interés para poder realizar las transformaciones adecuadas, hay que tener cuidado en que una imagen tenga solamente puntos de interés en común con la imagen a la que tiene que ir pegada, si no, el programa puede realizar un mosaico bastante extraño y fuera de ser una panorámica. \\
+
+Independientemente del número de imágenes introducidas en la carpeta, el programa proporcionará una imagen de resolución \texttt{2000x600} píxeles. Aunque se puede modificar, ajustando las variables globables \texttt{sizeX, sizeY} que hay en el código del programa. Las imágenes con las que se ha realizado las pruebas de este programa se encuentran en la carpeta \texttt{images/panoramic}. \\
+
+Para ejecutar este programa correctamente, se ha de ejecutar de la siguiente manera: \texttt{./exercise12.py [-h] folder}, donde:
+\begin{itemize}
+ \item \texttt{[-h]} es la opción de ayuda.
+ \item \texttt{folder} es la carpeta que contiene todas las imágenes con las que se quiere hacer la panorámica (respetando el orden anteriormente descrito, si se quiere que se haga una panorámica centrada).
+\end{itemize}
 
 
 
@@ -396,8 +407,23 @@ Detección de caras con la webcam en vivo, con emborronamiento de las mismas.
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
-Haciendo uso del ejercicio 10, se ha desarrollado este programa para reconocer matrículas de coche con la webcam. Para ello, primero se ha de seleccionar un ROI de la imagen, para después pulsar la tecla \texttt{Enter} y procesarlo. Hace uso de los modelos \texttt{platetemplates.jpg} que proporcionó el profesor y que se encuentra en la carpeta \texttt{images}
+Para la resolución de este ejercicio se ha hecho uso de la herramienta de detección de caras \texttt{adaboost} (\href{https://en.wikipedia.org/wiki/Viola\%E2\%80\%93Jones\_object\_detection\_framework}{\color{blue}\underline{Enlace}}, última visita 24/04/2017). Como esta herramienta hay que cargarla como una librería, por defecto, se hace uso de la librería ubicada en la ruta: \texttt{\$HOME/miniconda3/share/OpenCV/haarcascades/haarcascade\_frontalface\_default.xml}. Si se quiere utilizar la librería ubicada en otra ruta, el programa permite que se le pase como argumento la ruta usando la opción \texttt{-path} al ejecutarlo. \\
 
+El funcionamiento del programa es simple: de cada frame obtenido por la webcam, detecta todas las caras y las emborrona usando un suavizado gaussiano. Sin embargo, también dispone de un modo en el que solamente se emborrona una única cara. Para esto, hay que pulsar la tecla \texttt{f}, seleccionar con un ROI la cara que se quiera emborronar y pulsar la tecla \texttt{Enter} para emborronar únicamente esa cara. Para poder realizar esto, se ha hecho uso del cálculo de los puntos de interés, de esta manera, para cada cara que se detecte, se calcula las coincidencias con la cara que se ha seleccionado. Si supera un mínimo de coincidencias (variable \texttt{minMatches} que se puede modificar en el slider de la parte superior de la ventana), entonces se emborrona únicamente esa cara. \\
+
+La ejecución correcta de este programa es la siguiente: \texttt{./blurring-faces.py [-h] [-path PATH]}, donde:
+\begin{itemize}
+ \item \texttt{[-h]} es la opción de ayuda.
+ \item \texttt{[-path PATH]} es la opción para indicar la ruta donde se encuentra la librería de \texttt{adaboost}.
+\end{itemize}
+
+Las teclas necesarias para toda la funcionalidad de este programa son:
+\begin{itemize}
+ \item Tecla \texttt{f}: para entrar en el modo de emborronamiento de una única cara.
+ \item Tecla \texttt{Enter}: para que dentro del modo una cara y tras seleccionar la cara, se empiece a emborronar dicha cara.
+ \item Tecla \texttt{Esc}: para salir del modo de una cara y salir del programa.
+ \item Usar el ratón para seleccionar la cara.
+\end{itemize}
 
 
 
