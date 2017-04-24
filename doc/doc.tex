@@ -129,9 +129,9 @@ El programa principal, lo único que hace es: ver si se ha pulsado alguna tecla 
 
 Las teclas que se procesan en este programa son:
 \begin{itemize}
- \item Tecla \texttt{Enter}: Para eliminar el dibujo del ROI.
- \item Tecla \texttt{Espacio}: Para parar la webcam en una imagen.
- \item Tecla \texttt{s}: Para almacenar en disco los ROIs almacenados.
+ \item Tecla \texttt{Enter}: para eliminar el dibujo del ROI.
+ \item Tecla \texttt{Espacio}: para parar la webcam en una imagen.
+ \item Tecla \texttt{s}: para almacenar en disco los ROIs almacenados.
 \end{itemize}
 
 
@@ -146,12 +146,12 @@ Construye un clasificador de objetos en base a la similitud de los histogramas d
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
-Haciendo uso del ejercicio anterior, la resolución de este ejercicio se basa simplemente en una vez seleccionado el ROI, se calcula y almacena su histograma, para comparar con el histograma del ROI de la imagen actual y si supera un determinado valor (variable global \texttt{maxDiff}), cambiar el color del ROI a azul, indicando es similar al ROI almacenado. \\
+Haciendo uso del ejercicio anterior, la resolución de este ejercicio se basa simplemente en una vez seleccionado el ROI, se calcula y almacena su histograma, para comparar con el histograma del ROI de la imagen actual y si supera un determinado valor (variable global \texttt{maxDiff}), cambiar el color del ROI a azul, indicando que es similar al ROI almacenado. \\
 
 Las teclas que se procesan en este programa son:
 \begin{itemize}
- \item Tecla \texttt{Enter}: Para seleccionar el ROI y calcular su histograma.
- \item Tecla \texttt{Espacio}: Para parar la webcam en una imagen.
+ \item Tecla \texttt{Enter}: para seleccionar el ROI y calcular su histograma.
+ \item Tecla \texttt{Espacio}: para parar la webcam en una imagen.
 \end{itemize}
 
 %--------------------------------------------------------------------
@@ -225,9 +225,9 @@ La ejecución de este programa debe ser: \texttt{./exercise07.py [-h] models ima
  \item \texttt{image} es la imagen que se quiere segmentar.
 \end{itemize}
 
-Tras ejecutar correctamente el programa, este cargará los modelos (como color del modelo, se obtiene el color medio de todo el modelo), leerá la imagen y segmentará la imagen. Para segmentar la imagen, lo que hace es obtener las diferencias con todos los modelos, obtener para cada diferencia, el modelo más cercano con él, segmentar la imagen. Una vez terminado, el programa mostrará la imagen original y la imagen segmentada en color. No se tratan todos los píxeles de la imagen, pues se filtran aquellos píxeles que no pertenecen a ningún modelo. \\
+Tras ejecutar correctamente el programa, este cargará los modelos (como color del modelo, se obtiene el color medio de toda la imagen), leerá la imagen y la segmentará. Para segmentar la imagen, lo que hace es obtener las diferencias con todos los modelos, obtener para cada diferencia el modelo más cercano con él y segmentar la imagen con ese color. Una vez terminado, el programa mostrará la imagen original y la imagen segmentada en color. No se tratan todos los píxeles de la imagen, pues se filtran aquellos píxeles que no pertenecen a ningún modelo. \\
 
-Los modelos y las imágenes para la ejecución de este ejercicio están en la carpeta \texttt{exercise07}
+Los modelos para la ejecución de este ejercicio se encuentran en la carpeta \texttt{images/models}.
 
 
 %--------------------------------------------------------------------
@@ -244,7 +244,24 @@ La realización de este ejercicio se ha hecho de la siguiente manera: puesto que
 
 De esta manera, lo que consigo, es que en el código para la aplicación del filtro solamente trabaje con esos diccionarios y con una variable que indica el filtro a aplicar. Es decir, esté desacoplado al filtro real a aplicar. El programa principal, lo único de lo que se encarga es de procesar las teclas pulsadas para la aplicación del filtro correspondiente. \\
 
-Este programa se diferencia de los anteriores en que, una vez que se aplica un filtro, para salir de él hay que pulsar la tecla \texttt{Esc}. Esto hace que se deje de aplicar el filtro y aparecerá otra vez la imagen de la cámara original, listo para aplicar otro filtro. Para salir del programa, es necesario pulsar la tecla anterior cuando se encuentre la imagen de la camara original.
+Es importante destacar que el programa hace división entre dos tipos de filtros: los que hacen uso de una matriz de convolución (suma, resta, multiplicación, división, bordes, suavizado horizontal y vertical, etc) y los que no (suavizado gaussiano) (de este tipo, solo está el suavizado gaussiano, pero está preparado para añadir más filtros). De esta manera, dependiendo del tipo de filtro que se haga, este se aplicará según sea conveniente. \\
+
+Este programa se diferencia de los anteriores en que, una vez que se aplica un filtro, para salir de él hay que pulsar la tecla \texttt{Esc}. Esto hace que se deje de aplicar el filtro y aparecerá otra vez la imagen de la cámara original, listo para aplicar otro filtro. Para salir del programa, es necesario pulsar la tecla anterior cuando se encuentre la imagen de la camara original. \\
+
+Las teclas para realizar los filtros son:
+\begin{itemize}
+ \item Tecla \texttt{a}: para el filtro de sumar y restar.
+ \item Tecla \texttt{b}: para el filtro de multiplicación y división.
+ \item Tecla \texttt{c}: para el filtro de desplazamiento.
+ \item Tecla \texttt{d}: para el filtro de bordes horizontales.
+ \item Tecla \texttt{e}: para el filtro de bordes verticales.
+ \item Tecla \texttt{f}: para el filtro de suavizado por media.
+ \item Tecla \texttt{g}: para el filtro de suavizado gaussiano.
+ \item Tecla \texttt{upArrow}: para incrementar el valor actual del filtro.
+ \item Tecla \texttt{downArrow}: para decrementar el valor actual del filtro.
+ \item Tecla \texttt{Esc}: para salir del filtro actual y para terminar el programa.
+\end{itemize}
+
 
 
 %--------------------------------------------------------------------
@@ -301,7 +318,7 @@ En ambos casos, el programa, cuando procesa la imagen, muestra por consola el re
 
 %--------------------------------------------------------------------
 \subsubsection*{Enunciado}
-
+Rectifica la imagen de un plano para medir distancias (tomando referencias manualmente).
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
@@ -314,7 +331,7 @@ En ambos casos, el programa, cuando procesa la imagen, muestra por consola el re
 
 %--------------------------------------------------------------------
 \subsubsection*{Enunciado}
-
+Crea automáticamente un mosaico panorámico ajustando varias imágenes (>2). Recuerda que debe tratarse de una escena plana o de una escena cualquiera vista desde el mismo centro de proyección.
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
@@ -338,6 +355,21 @@ Programa de reconocimiento de matrículas con la webcam.
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
 Haciendo uso del ejercicio 10, se ha desarrollado este programa para reconocer matrículas de coche con la webcam. Para ello, primero se ha de seleccionar un ROI de la imagen, para después pulsar la tecla \texttt{Enter} y procesarlo. Hace uso de los modelos \texttt{platetemplates.jpg} que proporcionó el profesor y que se encuentra en la carpeta \texttt{images}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\subsection{Emborronamiento de caras}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Detección de caras con la webcam en vivo, con emborronamiento de las mismas.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Haciendo uso del ejercicio 10, se ha desarrollado este programa para reconocer matrículas de coche con la webcam. Para ello, primero se ha de seleccionar un ROI de la imagen, para después pulsar la tecla \texttt{Enter} y procesarlo. Hace uso de los modelos \texttt{platetemplates.jpg} que proporcionó el profesor y que se encuentra en la carpeta \texttt{images}
+
 
 
 
