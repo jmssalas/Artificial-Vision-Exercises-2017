@@ -322,6 +322,34 @@ Rectifica la imagen de un plano para medir distancias (tomando referencias manua
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}
+Este ejercicio se ha planteado de la siguiente manera: teniendo en cuenta que no era muy lógico hacer un programa que solamente rectificara la imagen de las monedas \texttt{coins.png} o la de la falta \texttt{falta2.jpg}, ya que para cada caso concreto se necesita una imagen de referencia concreta para poder hacer la rectificación; se ha hecho de tal manera que el programa reciba por parámetros la imagen que se quiere rectificar y la imagen que va a usar como referencia. De esta manera, el programa mostrará ambas imágenes para que el usuario pueda tomar los puntos de referencia de cada una. \\
+
+Para la toma de los puntos de referencia, en todas las ventanas, se hace clickando con el ratón en la posición que se quiera. Una vez seleccionado el punto, este no se podrá mover ni eliminar, así que hay que tener cuidado a la hora de elegir los puntos. Sin embargo, el programa tiene la funcionalidad de eliminar todos los puntos escogidos (tecla \texttt{c} que se mencionará más abajo). También es importante saber que para que funcione, el número de puntos elegidos en la imagen original y la de referencia debe ser el mismo (si no, el programa terminará con un mensaje de error, indicando el por qué); y la correspondencia entre dichos puntos es por orden de selección, es decir: el punto \texttt{p1} de la imagen original se corresponde con el punto \texttt{p1} de la imagen de referencia, y así con todos los puntos. \\
+
+Una vez que se hayan seleccionado los puntos, para realizar la transformación hay que pulsar la tecla \texttt{Enter}. Acto seguido aparecerá una ventana con la imagen transformada, donde podremos seleccionar tantos puntos como queramos y pulsando la tecla \texttt{d}, podemos calcular la distancia entre dichos puntos. La distancia entre los puntos, aparecerá por consola tomada en píxeles, donde el programa quedará a la espera de introducir la unidad de medida real de la imagen (kilómetros, metros, centímetros, ect) y a qué equivale un píxel de la imagen a la unidad elegida. Tras esto, mostrará la distancia convertida a la unidad de medida introducida. Tras esto, el programa se quedará a la espera de que se seleccionen otros puntos o salir pulsando la tecla \texttt{Esc}. \\
+
+Puesto que la transformación puede provocar que la imagen resultado salga en una posición que no se vea bien en la pantalla, el programa dispone de cuatro variables que se pueden modificar a gusto para modificar la posición y el tamaño de la imagen resultado en la ventana. Estas cuatro variables son:
+\begin{itemize}
+ \item \texttt{dx, dy} para desplazar la imagen en el eje X e Y, respectivamente.
+ \item \texttt{sx, sy} para escalar la imagen por un factor de escala en el eje X e Y, respectivamente.
+\end{itemize}
+Estas cuatro variables se tienen que modificar en el código del programa y se encuentran en la parte final de la declaración de todas las variables globales del programa, justo encima de la función \texttt{srcMouseEventHandler()}. \\
+
+Para poder ejecutar correctamente el programa, este debe ejecutarse de la siguiente manera: \texttt{./exercise11.py [-h] source reference}, donde:
+\begin{itemize}
+ \item \texttt{[-h]} es la opción de ayuda.
+ \item \texttt{source} es la imagen que se quiere rectificar.
+ \item \texttt{reference} es la imagen de referencia.
+\end{itemize}
+
+Las teclas necesarias para toda la funcionalidad de este programa son:
+\begin{itemize}
+ \item Tecla \texttt{Enter}: para realizar la transformación (para ello, es necesario que se hayan seleccionado los mismos puntos en las dos imágenes, si no, el programa da un error).
+ \item Tecla \texttt{d}: para calcular la distancia entre puntos de la imagen transformada (para ello, es necesario que se hayan seleccionado al menos dos puntos en la imagen, si no, el programa da un error).
+ \item Tecla \texttt{c}: para limpiar todos los puntos seleccionados en todas las imágenes.
+ \item Usar el ratón para seleccionar los puntos.
+\end{itemize}
+
 
 
 
@@ -331,7 +359,7 @@ Rectifica la imagen de un plano para medir distancias (tomando referencias manua
 
 %--------------------------------------------------------------------
 \subsubsection*{Enunciado}
-Crea automáticamente un mosaico panorámico ajustando varias imágenes (>2). Recuerda que debe tratarse de una escena plana o de una escena cualquiera vista desde el mismo centro de proyección.
+Crea automáticamente un mosaico panorámico ajustando varias imágenes ($>2$). Recuerda que debe tratarse de una escena plana o de una escena cualquiera vista desde el mismo centro de proyección.
 
 %--------------------------------------------------------------------
 \subsubsection*{Resolución}

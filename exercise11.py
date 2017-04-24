@@ -97,11 +97,6 @@ cv.namedWindow(srcWindow)
 cv.setMouseCallback(srcWindow, srcMouseEventHandler)
 
 # Set window's name
-cv.namedWindow(dstWindow)
-# Set mouseCallback to dstMouseEventHandler
-cv.setMouseCallback(dstWindow, dstMouseEventHandler)
-
-# Set window's name
 cv.namedWindow(refWindow)
 # Set mouseCallback to refMouseEventHandler
 cv.setMouseCallback(refWindow, refMouseEventHandler)
@@ -175,6 +170,14 @@ def convertListToArray(list):
 # Function which make transformation of source image above reference image
 def makeTransformation():
     global dstImage, dstOriginal
+
+    # I do it here because if I do it when set the others windows
+    # a black window will be showed and this does not have much sense
+    # Set window's name
+    cv.namedWindow(dstWindow)
+    # Set mouseCallback to dstMouseEventHandler
+    cv.setMouseCallback(dstWindow, dstMouseEventHandler)
+
 
     # Convert points lists to arrays
     view = convertListToArray(srcPoints)
@@ -258,20 +261,32 @@ def play():
         if key == escKey: break
 
         if key == enterKey:
-            if len(srcPoints) != len(refPoints) :
-                print('ERROR: The points on source and reference windows must be equals')
-                exit(-1)
+            srcLen = len(srcPoints)
+            refLen = len(refPoints)
 
-            makeTransformation()
-            clearPointsLists()
-            restartImages()
+            # Only make transformation if the points have been selected
+            if srcLen != 0 and refLen != 0:
+                # Check if there are same points in source and reference images
+                if srcLen != refLen :
+                    print('ERROR: The points on source and reference windows must be equals')
+                    exit(-1)
+
+                # Make transformation
+                makeTransformation()
+
+                # Clear points and restart images for can select others points
+                clearPointsLists()
+                restartImages()
 
         if key == distanceKey:
+            # Check if the transformation has been make before calculatedistances
             if dstImage is None:
                 print('ERROR: First, you must make transformation')
                 exit(-3)
 
-            calculateDistances()
+            # Only calculate distances when at least two points have been selected
+            if len(dstPoints) != 1:
+                calculateDistances()
 
         if key == clearKey:
             clearPointsLists()
