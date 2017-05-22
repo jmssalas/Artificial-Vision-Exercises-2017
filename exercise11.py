@@ -64,6 +64,10 @@ dstPoints = list()                  # List of points selected in dstWindow
 # Dictionary of lists of points
 points = {srcWindow: srcPoints, refWindow: refPoints, dstWindow: dstPoints}
 
+# P1-P2 points on reference Image
+p1, p2 = None, None
+# Real distance between P1-P2 on reference image
+measurement = 0
 
 # This variables are for modify the references points before make transformation
 dx = 100    # displacement in X
@@ -195,7 +199,9 @@ def makeTransformation():
 
 # Function which convert 'distance' in pixel to 'measurement' measurement
 def convertDistance(distance, measurement):
-    return distance*measurement
+    distP1P2 = np.sqrt(np.sum((vec(p2) - vec(p1)) ** 2))
+
+    return distance*measurement/distP1P2
 
 # Function which calculate distance between points of transformed image
 def calculateDistances():
@@ -216,13 +222,10 @@ def calculateDistances():
 
 
     print()
-    print('  Total =', distance, 'pixels')
-    unit = input('Introduce the unit of measurement (km, m, cm, mm,...):')
-    measurement = float(input('Introduce the equivalent of one pixel:'))
 
     realDistance = convertDistance(distance, measurement)
 
-    print('The real distance is', realDistance, unit)
+    print('The real distance is', realDistance)
 
 
 # Clear points lists
@@ -250,6 +253,7 @@ dstImage = None
 
 # Main function.
 def play():
+    global measurement, p1, p2
 
     restartImages()
 
@@ -273,6 +277,11 @@ def play():
 
                 # Make transformation
                 makeTransformation()
+
+                # Ask the real distance between P1-P2 on reference image
+                measurement = float(input('Introduce the real distance between P1-P2:'))
+                # Get P1-P2 points of refPoints before clear point list
+                p1 = refPoints[0]; p2 = refPoints[1]
 
                 # Clear points and restart images for can select others points
                 clearPointsLists()
