@@ -128,6 +128,9 @@ def putPoint(image, point, text):
     x,y = point
     putText(image=image, text=text, origin=(x+1,y+1))
 
+# Draw line above 'image' with origin 'origin' and destination 'destination'
+def drawLine(image, origin, destination) :
+    cv.line(img=image, pt1=origin, pt2=destination, color=(0, 255, 0))
 
 
 # Make a vector (array 1D)
@@ -199,6 +202,7 @@ def makeTransformation():
 
 # Function which convert 'distance' in pixel to 'measurement' measurement
 def convertDistance(distance, measurement):
+    # Calculate distance between p1 and p2
     distP1P2 = np.sqrt(np.sum((vec(p2) - vec(p1)) ** 2))
 
     return distance*measurement/distP1P2
@@ -217,7 +221,7 @@ def calculateDistances():
         # Calculate distance
         dis = np.sqrt(np.sum((p2 - p1) ** 2))
 
-        print(dis)
+        print(dis, 'pixels')
         distance += dis
 
 
@@ -225,6 +229,9 @@ def calculateDistances():
 
     realDistance = convertDistance(distance, measurement)
 
+    # Put real distance above 'dstImage'
+    putText(image=dstImage, text='The real distance is '+str(realDistance), origin=(20,20))
+    # Print real distance for console
     print('The real distance is', realDistance)
 
 
@@ -243,6 +250,25 @@ def restartImages():
         dstImage = np.copy(dstOriginal)
 
 
+def checkIfReferencePointsHaveBeenSelected() :
+    global measurement, p1, p2
+
+    if p1 is not None or p2 is not None:
+        return True
+
+    if len(dstPoints) != 2:
+        print('ERROR: You must select only two points')
+        exit(-3)
+
+    # Ask the real distance between P1-P2 on reference image
+    measurement = float(input('Introduce the real distance between P1-P2:'))
+    # Get P1-P2 points of refPoints before clear point list
+    p1 = dstPoints[0]; p2 = dstPoints[1]
+
+    clearPointsLists(); restartImages()
+
+    return False
+
 srcOriginal = readbgr(args.source)
 refOriginal = readbgr(args.reference)
 dstOriginal = None
@@ -253,8 +279,6 @@ dstImage = None
 
 # Main function.
 def play():
-    global measurement, p1, p2
-
     restartImages()
 
     while (True):
@@ -278,14 +302,11 @@ def play():
                 # Make transformation
                 makeTransformation()
 
-                # Ask the real distance between P1-P2 on reference image
-                measurement = float(input('Introduce the real distance between P1-P2:'))
-                # Get P1-P2 points of refPoints before clear point list
-                p1 = refPoints[0]; p2 = refPoints[1]
-
                 # Clear points and restart images for can select others points
                 clearPointsLists()
                 restartImages()
+
+                print('First, select only two reference points')
 
         if key == distanceKey:
             # Check if the transformation has been make before calculatedistances
@@ -293,8 +314,11 @@ def play():
                 print('ERROR: First, you must make transformation')
                 exit(-3)
 
+            if not checkIfReferencePointsHaveBeenSelected() :
+                print('Now, select points for calculate distance and press "d" again.')
+
             # Only calculate distances when at least two points have been selected
-            if len(dstPoints) != 1:
+            if len(dstPoints) > 1:
                 calculateDistances()
 
         if key == clearKey:
