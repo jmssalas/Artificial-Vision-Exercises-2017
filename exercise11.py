@@ -249,7 +249,8 @@ def restartImages():
     if dstOriginal is not None:
         dstImage = np.copy(dstOriginal)
 
-
+# Check if reference points above 'transformed' image have been selected.
+# It is for getting a reference distance for calculating real distance between two points.
 def checkIfReferencePointsHaveBeenSelected() :
     global measurement, p1, p2
 
@@ -268,6 +269,7 @@ def checkIfReferencePointsHaveBeenSelected() :
     clearPointsLists(); restartImages()
 
     return False
+
 
 srcOriginal = readbgr(args.source)
 refOriginal = readbgr(args.reference)
