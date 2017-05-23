@@ -377,6 +377,67 @@ Para ejecutar este programa correctamente, se ha de ejecutar de la siguiente man
 
 
 
+%--------------------------------------------------------------------
+\medskip
+\subsection{Ejercicio 13}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Crea un efecto de realidad aumentada dinámico.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+Para la resolución de este ejercicio, me he basado en el programa \texttt{pose0.py} proporcionado por el profesor. Este programa lo que hace es obtener de la webcam (o entrada de vídeo), las matrices de cámara asociadas al marcador que tiene la forma que muestra las imágenes de la Figura \ref{marker}. 
+\begin{figure}[!th]
+\includegraphics[scale=0.2]{marker} 
+\centering
+\caption{Imágenes del marcador para el ejercicio 13.}
+\label{marker}
+\end{figure}
+
+Basándome en esas matrices de cámara, lo que he realizado ha sido dibujar la imagen de la Figura \ref{image} sobre cada uno de los marcadores encontrados, de manera que se haga un efecto de realidad aumentada (pues la imagen no está físicamente en esa posición). Este efecto de realidad aumentada se puede apreciar en la Figura \ref{effect}.
+\begin{figure}[!th]
+\includegraphics[scale=0.4]{thing} 
+\centering
+\caption{Imagen dibujada en el ejercicio 13.}
+\label{image}
+\end{figure}
+\begin{figure}[!th]
+\includegraphics[scale=0.4]{effect} 
+\centering
+\caption{Efecto de realidad aumentada en el ejercicio 13.}
+\label{effect}
+\end{figure}
+
+Para hacer el efecto de realidad aumentada dinámico, he implementado la posibilidad de que si selecciona un punto de la imagen, la imagen de la Figura \ref{image} se desplace hasta esa posición. La parte más complicada de esto es cómo obtener el punto real de la escena a partir del punto que se ha seleccionado de la imagen. \\
+
+Para ello, se ha hecho lo siguiente (todo este cálculo es para tranformar los puntos suponiendo que los puntos seleccionados de la imagen se encuentran en el mismo plano donde se sitúa el marcador). Dada la matriz de cámara:
+$$M = \left[\begin{array}{cccc}
+x1 & y1 & z1 & w1 \\
+x2 & y2 & z2 & w2 \\
+x3 & y3 & z3 & w3 
+\end{array}\right]
+$$
+se ha obtenido la matriz de transformación (nos quedamos con las columnas 1,2 y 4):
+$$H = \left[\begin{array}{ccc}
+x1 & y1 & w1 \\
+x2 & y2 & w2 \\
+x3 & y3 & w3 
+\end{array}\right]
+$$
+Con la matriz $H$, calculamos su matriz inversa $H^{-1}$ que es la que transforma puntos de la imagen a puntos de la escena. Así pues, si se ha seleccinado el punto $(p,q)$ de la imagen, el punto $(x,y)$ se obtiene realizando la siguiente operación (aplicar la matriz de tranformación $H^{-1}$):
+$$\left[\begin{array}{c}
+         x \\ y \\ w
+        \end{array}\right] = H^{-1} \cdot \left[\begin{array}{c}
+                                                 p \\ q \\ 1
+                                                \end{array}\right]
+$$
+que nos proporciona las coordenadas homogéneas del punto de la escena. Ahora solamente hace falta convertir esos puntos homogéneos a puntos normales, realizando la siguiente operación:
+$$x = x / w \mbox{ ; } y = y / w$$
+
+Una vez obtenido el punto real de la escena, ahora simplemente hay que modificar las posiciones de la imagen virtual para que vayan hacia ese punto. Cuando se selecciona un punto, este punto aparece marcado en la escena para que se sepa a qué punto va la imagen. \\
+
+Es importante destacar que el cálculo de este punto se hace para la primera matriz de cámara que se encuentra y luego ese punto se aplica a las demás cámaras. De tal manera que, en el caso de que se encuentren varios marcadores, las imágenes virtuales no se van a mover al mismo punto de la escena, sino que se van a mover al punto de su sistema de referencia, pues para cada marcador se obtiene una matriz de cámara que implica un sistema de referencia propio.
 
 %--------------------------------------------------------------------
 \medskip
@@ -424,6 +485,12 @@ Las teclas necesarias para toda la funcionalidad de este programa son:
  \item Tecla \texttt{Esc}: para salir del modo de una cara y salir del programa.
  \item Usar el ratón para seleccionar la cara.
 \end{itemize}
+
+
+
+%--------------------------------------------------------------------
+\medskip
+\section{Conclusiones}
 
 
 

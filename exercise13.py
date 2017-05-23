@@ -81,24 +81,30 @@ worldX, worldY = None, None     # World coordinates
 
 # Mouse event handler
 def mouseEventHandler(event, x, y, flags, param):
-    global poses, worldX, worldY
-
     if event == cv.EVENT_LBUTTONDOWN:
-        # If there is not camera, return
-        if poses is [] or poses is None: return;
-
-        p = poses[0]                                # Get first camera
-        H = getHOfCameraMatrix(camera=p)            # Get H homography of 'p'
-        invH = la.inv(H)                            # Get inverse of H
-        worldPoint = htrans(invH, (x, y))           # Get worldPoint of image point (x,y)
-        worldX = round(worldPoint[0], ndigits=2)    # Get coordinate X (round with 2 digits)
-        worldY = round(worldPoint[1], ndigits=2)    # Get coordinate Y (round with 2 digits)
-        print('x =',worldX,', y =',worldY)          # Print worldPoint (X,Y)
+        getWorldPointOfImagePoint(x,y)
 
 # Set window's name
 cv.namedWindow(programName)
 # Set mouseCallback to srcMouseEventHandler
 cv.setMouseCallback(programName, mouseEventHandler)
+
+
+# Get world point of image point (x,y), using first camera matrix of 'poses'
+def getWorldPointOfImagePoint(x,y):
+    global poses, worldX, worldY
+
+    # If there is not camera, return
+    if poses is [] or poses is None: return;
+
+    p = poses[0]                                # Get first camera
+    H = getHOfCameraMatrix(camera=p)            # Get H homography of 'p'
+    invH = la.inv(H)                            # Get inverse of H
+    worldPoint = htrans(invH, (x, y))           # Get worldPoint of image point (x,y)
+    worldX = round(worldPoint[0], ndigits=2)    # Get coordinate X (round with 2 digits)
+    worldY = round(worldPoint[1], ndigits=2)    # Get coordinate Y (round with 2 digits)
+    print('x =', worldX, ', y =', worldY)       # Print worldPoint (X,Y)
+
 
 # Get H homography of camera matrix 'camera' 3x4 with contains
 # the dimensions 0,1, and 3 of 'camera'.
@@ -131,13 +137,13 @@ def bestPose(K,view,model):
 
 # Variables of shift
 dx = 0.0
-dxReturn = False
+dxNegativeShift = False
 dy = 0.0
-dyReturn = False
+dyNegativeShift = False
 
 # Function which move points of virtual image
 def moveImage() :
-    global dx,dy,dxReturn,dyReturn
+    global dx,dy,dxNegativeShift,dyNegativeShift
 
     # Round dx, dy, because the 'getPerspectiveTransform()' function modify them
     dx = round(dx, ndigits=2); dy = round(dy, ndigits=2)
@@ -148,12 +154,12 @@ def moveImage() :
     if dx != worldX :
         # Move coordinate X
         if dx > worldX :
-            dxReturn = True
+            dxNegativeShift = True
 
         if dx < worldX :
-            dxReturn = False
+            dxNegativeShift = False
 
-        if dxReturn :
+        if dxNegativeShift :
             dx -= 0.01
         else :
             dx += 0.01
@@ -161,12 +167,12 @@ def moveImage() :
     if dy != worldY :
         # Move coordinate Y
         if dy > worldY :
-            dyReturn = True
+            dyNegativeShift = True
 
         if dy < worldY :
-            dyReturn = False
+            dyNegativeShift = False
 
-        if dyReturn :
+        if dyNegativeShift :
             dy -= 0.01
         else :
             dy += 0.01
