@@ -212,20 +212,11 @@ def calculateDistances():
     print('The distance is:')
 
     distance = 0.0
-    point = 1
     # For each couple of points
     for p1, p2 in [ (vec(x), vec(y)) for (x,y) in zip(dstPoints, dstPoints[1:]) ]:
-        print('  p',point, ' - ', 'p',point+1, ' = ', end='', sep='')
-        point += 1
-
         # Calculate distance
         dis = np.sqrt(np.sum((p2 - p1) ** 2))
-
-        print(dis, 'pixels')
         distance += dis
-
-
-    print()
 
     realDistance = convertDistance(distance, measurement)
 
@@ -308,7 +299,7 @@ def play():
                 clearPointsLists()
                 restartImages()
 
-                print('First, select only two reference points')
+                print('First, select only two reference point above transformed window. Before, press "d"')
 
         if key == distanceKey:
             # Check if the transformation has been make before calculatedistances

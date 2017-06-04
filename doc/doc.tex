@@ -326,7 +326,7 @@ Este ejercicio se ha planteado de la siguiente manera: teniendo en cuenta que no
 
 Para la toma de los puntos de referencia, en todas las ventanas, se hace clickando con el ratón en la posición que se quiera. Una vez seleccionado el punto, este no se podrá mover ni eliminar, así que hay que tener cuidado a la hora de elegir los puntos. Sin embargo, el programa tiene la funcionalidad de eliminar todos los puntos escogidos (tecla \texttt{c} que se mencionará más abajo). También es importante saber que para que funcione, el número de puntos elegidos en la imagen original y la de referencia debe ser el mismo (si no, el programa terminará con un mensaje de error, indicando el por qué); y la correspondencia entre dichos puntos es por orden de selección, es decir: el punto \texttt{p1} de la imagen original se corresponde con el punto \texttt{p1} de la imagen de referencia, y así con todos los puntos. \\
 
-Una vez que se hayan seleccionado los puntos, para realizar la transformación hay que pulsar la tecla \texttt{Enter}. Acto seguido aparecerá una ventana con la imagen transformada, donde podremos seleccionar tantos puntos como queramos y pulsando la tecla \texttt{d}, podemos calcular la distancia entre dichos puntos. La distancia entre los puntos, aparecerá por consola tomada en píxeles, donde el programa quedará a la espera de introducir la unidad de medida real de la imagen (kilómetros, metros, centímetros, ect) y a qué equivale un píxel de la imagen a la unidad elegida. Tras esto, mostrará la distancia convertida a la unidad de medida introducida. Tras esto, el programa se quedará a la espera de que se seleccionen otros puntos o salir pulsando la tecla \texttt{Esc}. \\
+Una vez que se hayan seleccionado los puntos tanto en la imagen real como en la referencia, para realizar la transformación hay que pulsar la tecla \texttt{Enter}. Acto seguido aparecerá una ventana con la imagen transformada. Lo primero que hay que hacer, es seleccionar en dicha imagen, dos puntos de referencia (para que funcione correctamente, estos dos puntos deben pertenecer a la referencia en la imagen transformada) y tras esto, pulsar la tecla \texttt{d}. Después, el programa se quedará esperando a que se introduzca la distancia real que hay entre esos dos puntos seleccionados. Una vez introducidos, el programa pedirá que se seleccionen aquellos para los que nosotros queremos saber su distancia real, una vez seleccionados, hay que pulsar la tecla \texttt{d} para obtener la distancia real entre esos puntos. \\
 
 Puesto que la transformación puede provocar que la imagen resultado salga en una posición que no se vea bien en la pantalla, el programa dispone de cuatro variables que se pueden modificar a gusto para modificar la posición y el tamaño de la imagen resultado en la ventana. Estas cuatro variables son:
 \begin{itemize}
@@ -345,7 +345,7 @@ Para poder ejecutar correctamente el programa, este debe ejecutarse de la siguie
 Las teclas necesarias para toda la funcionalidad de este programa son:
 \begin{itemize}
  \item Tecla \texttt{Enter}: para realizar la transformación (para ello, es necesario que se hayan seleccionado los mismos puntos en las dos imágenes, si no, el programa da un error).
- \item Tecla \texttt{d}: para calcular la distancia entre puntos de la imagen transformada (para ello, es necesario que se hayan seleccionado al menos dos puntos en la imagen, si no, el programa da un error).
+ \item Tecla \texttt{d}: para indicar que se han seleccionado los puntos de referencia y para calcular la distancia entre puntos de la imagen transformada (para ello, es necesario que se hayan seleccionado al menos dos puntos en la imagen, si no, el programa da un error).
  \item Tecla \texttt{c}: para limpiar todos los puntos seleccionados en todas las imágenes.
  \item Usar el ratón para seleccionar los puntos.
 \end{itemize}
@@ -439,6 +439,46 @@ Una vez obtenido el punto real de la escena, ahora simplemente hay que modificar
 
 Es importante destacar que el cálculo de este punto se hace para la primera matriz de cámara que se encuentra y luego ese punto se aplica a las demás cámaras. De tal manera que, en el caso de que se encuentren varios marcadores, las imágenes virtuales no se van a mover al mismo punto de la escena, sino que se van a mover al punto de su sistema de referencia, pues para cada marcador se obtiene una matriz de cámara que implica un sistema de referencia propio.
 
+
+%--------------------------------------------------------------------
+\medskip \newpage
+\subsection{Ejercicio 14}
+
+%--------------------------------------------------------------------
+\subsubsection*{Enunciado}
+Estima "a ojo" el campo de visión y parámetro $f$ de tu cámara y comprueba que es consistente con el resultado de la calibración precisa mediante \textit{chessboard}.
+
+%--------------------------------------------------------------------
+\subsubsection*{Resolución}
+La resolución de este ejercicio se ha hecho con la escena de la Figura \ref{scene}. La botella se encuentra a una distancia de $142cm$ y su dimensión real es de $26cm$. En la imagen, la distancia que hay entre \texttt{p1} y \texttt{p2} es de $128px$. Teniendo estas medidas, la Figura \ref{schema} muestra el esquema de esta escena.
+\begin{figure}[!th]
+\includegraphics[scale=0.4]{image} 
+\centering
+\caption{Escena para el ejercicio 14.}
+\label{scene}
+\end{figure}
+\begin{figure}[!th]
+\includegraphics[scale=0.5]{schema} 
+\centering
+\caption{Escena para el ejercicio 14.}
+\label{schema}
+\end{figure}
+
+Ahora, lo importante es calcular $f$, que es el parámetro $f$ de mi cámara. Para ello, hacemos uso de la igualdad triangular, teniendo que:
+$$\frac{26}{142} = \frac{136}{f} \rightarrow f = \frac{136\cdot142}{26} = 742.7692 \approx 743$$
+
+Teniendo en cuenta que la resolución de la cámara en la Figura \ref{scene} es de $640x480$, tenemos que la matriz de calibración de mi cámara es:
+$$K = \left[ 
+\begin{array}{ccc}
+ 743 & 0 & 320 \\
+ 0 & 743 & 240 \\
+ 0 & 0 & 1
+\end{array} 
+\right]
+$$
+
+También, tenemos que el campo de visión de mi cámara es:
+$$\theta = 2 \arctan \frac{320}{743} = 0,8133544 \mbox{ radianes} \approx 46,6 \mbox{ grados}$$
 %--------------------------------------------------------------------
 \medskip
 \section{Experimentos}
@@ -491,7 +531,9 @@ Las teclas necesarias para toda la funcionalidad de este programa son:
 %--------------------------------------------------------------------
 \medskip
 \section{Conclusiones}
+Debido a que la asignatura es plenamente práctica, la realización de todos los ejercicios, así como los experimientos, me han servido para afianzar los conocimientos de la asignatura. También a darme cuenta de que ciertos problemas que, a simple vista, son sencillos de resolver, cuando se intenta resolver mediante visión artificial, realmente no son tan sencillos. Y viceversa, problemas que cuando los ves piensas que son difíciles de resolver y luego se resuelven con diez simples líneas de código. \\
 
+He de admitir que la asignatura me ha gustado bastante y sé que los conocimientos adquiridos me van a servir en un futuro, tanto en mi vida laboral como en mi vida personal, pues ya sé lo fácil que es hacer un programa que me detecte si hay movimiento en una habitación, donde tengo puesta una cámara grabando, y que el propio programa me envíe a mi móvil la imagen de lo que realmente está pasando en dicha habitación.
 
 \newpage
 \input{bib.tex}
