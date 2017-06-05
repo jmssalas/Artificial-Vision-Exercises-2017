@@ -299,7 +299,7 @@ def play():
                 clearPointsLists()
                 restartImages()
 
-                print('First, select only two reference point above transformed window. Before, press "d"')
+                print('First, select only two reference point above transformed window. After, press "d".')
 
         if key == distanceKey:
             # Check if the transformation has been make before calculatedistances
