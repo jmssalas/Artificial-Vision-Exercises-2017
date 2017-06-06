@@ -479,6 +479,25 @@ $$
 
 También, tenemos que el campo de visión de mi cámara es:
 $$\theta = 2 \arctan \frac{320}{743} = 0,8133544 \mbox{ radianes} \approx 46,6 \mbox{ grados}$$
+
+El enunciado pide que se compruebe el resultado utilizando la calibración precisa mediante \textit{chessboard}. Para ello, se ha hecho uso del programa \texttt{calibrate.py} que se encuentra dentro de la carpeta \texttt{exercise14-calibrate}. Dentro de esa carpeta se encuentran las imágenes del \textit{chessboard} tomadas con mi cámara. Para la ejecución de este programa, se ha de ejecutar los siguiente:
+\begin{center}
+ \texttt{./calibrate ''chessboard/*.png''}
+\end{center}
+Con esto, el programa cogerá todas las imágenes, realizará los cálculos necesarios y devolverá la matriz de cámara. Para mi cámara, se ha obtenido, aproximadamente, la siguiente matriz de cámara:
+$$K = \left[ 
+\begin{array}{ccc}
+ 693 & 0 & 363 \\
+ 0 & 700 & 179 \\
+ 0 & 0 & 1
+\end{array} 
+\right]
+$$
+
+Con estos datos, vemos que la diferencia entre los resultados obtenidos con la calibración manual y la calibración precisa, está entorno a $\pm50$, por lo que entra dentro de la diferencia buscada en el ejercicio. 
+
+
+
 %--------------------------------------------------------------------
 \medskip
 \section{Experimentos}
